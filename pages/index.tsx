@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Container, Paper, Typography } from '@mui/material'
+import { PageTemplate } from '../components/ui'
+import { Form as LinkGeneratorForm } from '../components/linkGenerator'
 
 const Home: NextPage = () => {
   return (
@@ -13,13 +14,10 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxWidth="lg">
-        <Paper sx={{ padding: 3 }}>
-          <Typography variant={'h1'} component={'h1'} align={'center'}>
-            Welcome to Shortify URL
-          </Typography>
-        </Paper>
-      </Container>
+
+      <PageTemplate title={'Welcome to Shortify URL'}>
+        <LinkGeneratorForm />
+      </PageTemplate>
     </>
   )
 }
