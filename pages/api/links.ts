@@ -1,21 +1,36 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import normalizeUrl from 'normalize-url'
+import { isWebUri } from 'valid-url'
+import { ShortifyUrl } from '../../models/ShortifyUrl'
+import {
+  createUrl,
+  findUrl,
+  increaseUrlRequestCount,
+} from '../../services/links'
 
-export type LinksPostData = {
-  shortifyUrl: string
-}
+const postUrl = async (url: string): Promise<ShortifyUrl> => {
+  if (!isWebUri(url)) {
+    return Promise.reject('URL is not valid')
+  }
 
-const postLink = (url: string): LinksPostData => {
   const normalizedUrl = normalizeUrl(url)
-  return { shortifyUrl: normalizedUrl }
+  const existingUrl = await findUrl(normalizedUrl)
+
+  if (existingUrl) {
+    await increaseUrlRequestCount(existingUrl)
+    return existingUrl
+  }
+
+  return await createUrl(normalizedUrl)
 }
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<LinksPostData>
+  res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    return res.status(200).json(postLink(req.body.url))
+    const shortifyUrl = await postUrl(req.body.url)
+    return res.status(200).json(shortifyUrl)
   }
 
   return res.status(404)

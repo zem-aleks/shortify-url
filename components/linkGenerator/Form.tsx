@@ -16,6 +16,10 @@ import { notReachable } from '../../utility/notReachable'
 import { Preloader } from './Preloader'
 import { useLazyLoadableData } from '../hooks/useLazyLoadableData'
 import { fetchShortifyUrl } from '../api/fetchShortifyUrl'
+import { ShortifyUrl } from '../../models/ShortifyUrl'
+
+const getShortifyUrl = (link: ShortifyUrl) =>
+  `${window.location.origin}/${link.code}`
 
 export const Form = (): JSX.Element => {
   const [url, setUrl] = useState<string>('')
@@ -75,13 +79,13 @@ export const Form = (): JSX.Element => {
               id="shortify-url"
               fullWidth
               type={'url'}
-              value={state.data.shortifyUrl}
+              value={getShortifyUrl(state.data)}
               label={'Shortify URL'}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="Copy shortify URL"
-                    onClick={() => copy(state.data.shortifyUrl)}
+                    onClick={() => copy(state.data.code)}
                     edge="end"
                   >
                     <ContentCopy />
