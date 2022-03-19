@@ -1,25 +1,11 @@
 import React, { useState } from 'react'
-import { ContentCopy } from '@mui/icons-material'
-import copy from 'copy-to-clipboard'
-import {
-  Button,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  TextField,
-} from '@mui/material'
+import { Button, Stack, TextField } from '@mui/material'
 
 import { notReachable } from '../../utility/notReachable'
 import { Preloader } from './Preloader'
 import { useLazyLoadableData } from '../hooks/useLazyLoadableData'
 import { fetchShortifyUrl } from '../api/fetchShortifyUrl'
-import { ShortifyUrl } from '../../models/ShortifyUrl'
-
-const getShortifyUrl = (link: ShortifyUrl) =>
-  `${window.location.origin}/${link.code}`
+import { ShortifyUrlInput } from './ShortifyUrlInput'
 
 export const Form = (): JSX.Element => {
   const [url, setUrl] = useState<string>('')
@@ -74,28 +60,8 @@ export const Form = (): JSX.Element => {
             value={url}
           />
 
-          <FormControl variant="outlined">
-            <InputLabel htmlFor="shortify-url">Shortify URL</InputLabel>
-            <OutlinedInput
-              id="shortify-url"
-              fullWidth
-              type={'url'}
-              value={getShortifyUrl(state.data)}
-              label={'Shortify URL'}
-              color={'success'}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="Copy shortify URL"
-                    onClick={() => copy(getShortifyUrl(state.data))}
-                    edge="end"
-                  >
-                    <ContentCopy />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
+          <ShortifyUrlInput shortifyUrl={state.data} />
+
           <Button
             variant="contained"
             fullWidth

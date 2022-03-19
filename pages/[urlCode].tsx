@@ -5,6 +5,7 @@ import { PageTemplate } from '../components/ui'
 import { MainPageWrapper } from '../components/ui/MainPageWrapper'
 import { findUrlByCode, increaseUrlVisitsCount } from '../services/links'
 import { RedirectHandler, RedirectState } from '../components/linkGenerator'
+import { Paper } from '@mui/material'
 
 type Props = RedirectState
 
@@ -12,7 +13,9 @@ const ShortifyUrlPage: NextPage<Props> = (props) => {
   return (
     <MainPageWrapper>
       <PageTemplate title={'Welcome to Shortify URL'}>
-        <RedirectHandler redirectState={props} />
+        <Paper sx={{ padding: 3, margin: 2 }}>
+          <RedirectHandler redirectState={props} />
+        </Paper>
       </PageTemplate>
     </MainPageWrapper>
   )

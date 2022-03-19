@@ -5,6 +5,7 @@ import { ShortifyUrl } from '../../models/ShortifyUrl'
 import {
   createUrl,
   findUrl,
+  getLatestUrls,
   increaseUrlRequestCount,
 } from '../../services/links'
 
@@ -31,6 +32,11 @@ export default async function handler(
   if (req.method === 'POST') {
     const shortifyUrl = await postUrl(req.body.url)
     return res.status(200).json(shortifyUrl)
+  }
+
+  if (req.method === 'GET') {
+    const urls = await getLatestUrls(100)
+    return res.status(200).json(urls)
   }
 
   return res.status(404)

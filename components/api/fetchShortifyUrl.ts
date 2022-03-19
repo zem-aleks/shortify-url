@@ -15,3 +15,9 @@ export const fetchShortifyUrl = ({ url }: Props): Promise<ShortifyUrl> => {
     .post<ShortifyUrl>('/api/links', { url })
     .then((response) => response.data)
 }
+
+export const getShortifyUrls = (): Promise<ShortifyUrl[]> => {
+  return axios
+    .get<ShortifyUrl[]>('/api/links')
+    .then((response) => response.data)
+}

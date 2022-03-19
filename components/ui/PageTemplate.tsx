@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Box, Container, Paper, Typography } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
 
 type Props = {
   title?: JSX.Element | string
@@ -15,7 +15,7 @@ export const PageTemplate = ({ title, children }: Props): JSX.Element => {
             {title}
           </Typography>
         )}
-        <Paper sx={{ padding: 3, margin: 2 }}>{children}</Paper>
+        {children}
       </Container>
     </Box>
   )

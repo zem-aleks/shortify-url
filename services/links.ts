@@ -45,11 +45,6 @@ export const findUrlByCode = async (
   return database.collection<ShortifyUrl>('links').findOne({ code: code })
 }
 
-export const mapRecordToEntity = (record: WithId<ShortifyUrl>): ShortifyUrl => {
-  const { _id, ...entity } = record
-  return entity
-}
-
 export const createUrl = async (url: string): Promise<ShortifyUrl> => {
   const database = await getDb()
   const newUrl: ShortifyUrl = {
@@ -60,4 +55,11 @@ export const createUrl = async (url: string): Promise<ShortifyUrl> => {
   }
   await database.collection<ShortifyUrl>('links').insertOne(newUrl)
   return newUrl
+}
+
+export const getLatestUrls = async (
+  limit: number
+): Promise<WithId<ShortifyUrl>[]> => {
+  const database = await getDb()
+  return database.collection<ShortifyUrl>('links').find().limit(limit).toArray()
 }
