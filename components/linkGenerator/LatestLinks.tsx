@@ -9,11 +9,20 @@ import {
   Typography,
 } from '@mui/material'
 
-import { useLoadableData } from '../hooks/useLoadableData'
+import { LoadableData } from '../hooks/useLoadableData'
 import { notReachable } from '../../utility/notReachable'
-import { getShortifyUrls } from '../api/fetchShortifyUrl'
 import { ShortifyUrlInput } from './ShortifyUrlInput'
 import { OpenInNew } from '@mui/icons-material'
+import { ShortifyUrl } from '../../models/ShortifyUrl'
+
+type Msg = {
+  type: 'onReloadButtonClicked'
+}
+
+type Props = {
+  linksState: LoadableData<ShortifyUrl[], undefined>
+  onMsg: (msg: Msg) => void
+}
 
 const LatestLinksTemplate: React.FC = ({ children }) => {
   return (
@@ -26,15 +35,19 @@ const LatestLinksTemplate: React.FC = ({ children }) => {
   )
 }
 
-export const LatestLinks = (): JSX.Element | null => {
-  const { state, reload } = useLoadableData(getShortifyUrls, undefined)
-
-  switch (state.type) {
+export const LatestLinks = ({
+  linksState,
+  onMsg,
+}: Props): JSX.Element | null => {
+  switch (linksState.type) {
     case 'error':
       return (
         <LatestLinksTemplate>
-          <Typography>Something went wrong: {state.error}</Typography>
-          <Button fullWidth onClick={() => reload(undefined)}>
+          <Typography>Something went wrong: {linksState.error}</Typography>
+          <Button
+            fullWidth
+            onClick={() => onMsg({ type: 'onReloadButtonClicked' })}
+          >
             Reload
           </Button>
         </LatestLinksTemplate>
@@ -50,7 +63,17 @@ export const LatestLinks = (): JSX.Element | null => {
     case 'loaded':
       return (
         <LatestLinksTemplate>
-          {state.data.map((shortifyUrl) => (
+          {linksState.data.length === 0 && (
+            <Card>
+              <CardContent>
+                <Typography variant={'h6'} align={'center'}>
+                  No URLs added yet
+                </Typography>
+              </CardContent>
+            </Card>
+          )}
+
+          {linksState.data.map((shortifyUrl) => (
             <Card key={shortifyUrl.code}>
               <CardContent>
                 <Stack
@@ -88,6 +111,6 @@ export const LatestLinks = (): JSX.Element | null => {
       )
 
     default:
-      return notReachable(state)
+      return notReachable(linksState)
   }
 }

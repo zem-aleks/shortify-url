@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { notReachable } from '../../utility/notReachable'
 
-type LoadableData<Data, Params> =
+export type LoadableData<Data, Params> =
   | {
       type: 'error'
       error: string
     }
   | {
       type: 'loading'
-      params: Params
+      params?: Params
     }
   | {
       type: 'loaded'
@@ -17,22 +17,22 @@ type LoadableData<Data, Params> =
     }
 
 type LoadableDataHook<Data, Params> = {
-  reload: (params: Params) => void
+  reload: (params?: Params) => void
   state: LoadableData<Data, Params>
 }
 
 export const useLoadableData = <Data, Params>(
-  fetchData: (params: Params) => Promise<Data>,
-  params: Params
+  fetchData: (params?: Params) => Promise<Data>,
+  params?: Params
 ): LoadableDataHook<Data, Params> => {
   const [state, setState] = useState<LoadableData<Data, Params>>({
     type: 'loading',
     params,
   })
 
-  const reload = (params: Params) => {
+  const reload = useCallback((params?: Params) => {
     setState({ type: 'loading', params })
-  }
+  }, [])
 
   useEffect(() => {
     switch (state.type) {

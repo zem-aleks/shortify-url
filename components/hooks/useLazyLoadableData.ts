@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { notReachable } from '../../utility/notReachable'
 
-type LazyLoadableData<Data, Params> =
+export type LazyLoadableData<Data, Params> =
   | {
       type: 'notRequested'
     }

@@ -3,4 +3,5 @@ export type ShortifyUrl = {
   code: string
   visitsCount: number
   creationRequestsCount: number
+  createdAt: Date
 }

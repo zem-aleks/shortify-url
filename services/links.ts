@@ -52,6 +52,7 @@ export const createUrl = async (url: string): Promise<ShortifyUrl> => {
     code: nanoid(14),
     creationRequestsCount: 1,
     visitsCount: 0,
+    createdAt: new Date(),
   }
   await database.collection<ShortifyUrl>('links').insertOne(newUrl)
   return newUrl
@@ -61,5 +62,10 @@ export const getLatestUrls = async (
   limit: number
 ): Promise<WithId<ShortifyUrl>[]> => {
   const database = await getDb()
-  return database.collection<ShortifyUrl>('links').find().limit(limit).toArray()
+  return database
+    .collection<ShortifyUrl>('links')
+    .find()
+    .limit(limit)
+    .sort({ createdAt: -1 })
+    .toArray()
 }
