@@ -10,18 +10,16 @@ import {
 import { ContentCopy, Link as LinkIcon } from '@mui/icons-material'
 import { ShortifyUrl } from '../../models/ShortifyUrl'
 import copy from 'copy-to-clipboard'
+import { getShortifyUrl } from '../helpers/getShortifyUrl'
 
 type Props = {
   shortifyUrl: ShortifyUrl
 }
 
-const getShortifyUrl = (link: ShortifyUrl) =>
-  `${window.location.origin}/${link.code}`
-
 export const ShortifyUrlInput = ({
   shortifyUrl,
 }: Props): JSX.Element | null => {
-  const url = getShortifyUrl(shortifyUrl)
+  const url = getShortifyUrl(shortifyUrl.code)
   return (
     <FormControl variant="outlined" fullWidth>
       <InputLabel htmlFor="shortify-url">Shortify URL</InputLabel>

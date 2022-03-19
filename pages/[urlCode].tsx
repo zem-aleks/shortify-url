@@ -26,17 +26,15 @@ export const getServerSideProps = async ({
   params,
 }: {
   params: { urlCode: string }
-}): Promise<
-  { props: Props } | { redirect: { destination: string; permanent: boolean } }
-> => {
+}): Promise<{ props: Props }> => {
   try {
     const shortifyUrl = await findUrlByCode(params.urlCode)
     if (shortifyUrl) {
       await increaseUrlVisitsCount(shortifyUrl)
       return {
-        redirect: {
-          destination: shortifyUrl.url,
-          permanent: false,
+        props: {
+          type: 'found',
+          url: shortifyUrl.url,
         },
       }
     }
