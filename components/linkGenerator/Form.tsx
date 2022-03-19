@@ -70,6 +70,7 @@ export const Form = (): JSX.Element => {
             type={'url'}
             label="Enter a long URL to make a short version"
             variant="outlined"
+            color={'success'}
             value={url}
           />
 
@@ -81,11 +82,12 @@ export const Form = (): JSX.Element => {
               type={'url'}
               value={getShortifyUrl(state.data)}
               label={'Shortify URL'}
+              color={'success'}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="Copy shortify URL"
-                    onClick={() => copy(state.data.code)}
+                    onClick={() => copy(getShortifyUrl(state.data))}
                     edge="end"
                   >
                     <ContentCopy />

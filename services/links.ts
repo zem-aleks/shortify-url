@@ -17,11 +17,37 @@ export const increaseUrlRequestCount = async (
   )
 }
 
+export const increaseUrlVisitsCount = async (
+  shortifyUrl: WithId<ShortifyUrl>
+) => {
+  const database = await getDb()
+  return database.collection<ShortifyUrl>('links').updateOne(
+    { _id: shortifyUrl._id },
+    {
+      $set: {
+        visitsCount: shortifyUrl.visitsCount + 1,
+      },
+    }
+  )
+}
+
 export const findUrl = async (
   url: string
 ): Promise<WithId<ShortifyUrl> | null> => {
   const database = await getDb()
   return database.collection<ShortifyUrl>('links').findOne({ url: url })
+}
+
+export const findUrlByCode = async (
+  code: string
+): Promise<WithId<ShortifyUrl> | null> => {
+  const database = await getDb()
+  return database.collection<ShortifyUrl>('links').findOne({ code: code })
+}
+
+export const mapRecordToEntity = (record: WithId<ShortifyUrl>): ShortifyUrl => {
+  const { _id, ...entity } = record
+  return entity
 }
 
 export const createUrl = async (url: string): Promise<ShortifyUrl> => {
