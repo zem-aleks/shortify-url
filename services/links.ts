@@ -49,7 +49,7 @@ export const createUrl = async (url: string): Promise<ShortifyUrl> => {
   const database = await getDb()
   const newUrl: ShortifyUrl = {
     url,
-    code: nanoid(14),
+    code: nanoid(8),
     creationRequestsCount: 1,
     visitsCount: 0,
     createdAt: new Date(),
