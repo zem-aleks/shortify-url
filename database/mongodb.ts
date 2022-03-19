@@ -14,7 +14,7 @@ export const connect = (): Promise<MongoClient> => {
 
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
-  if (process.env.NODE_ENV === 'development' && global._mongoConnection) {
+  if (global._mongoConnection) {
     return global._mongoConnection
   }
 
