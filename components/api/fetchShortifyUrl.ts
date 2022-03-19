@@ -21,3 +21,9 @@ export const getShortifyUrls = (): Promise<ShortifyUrl[]> => {
     .get<ShortifyUrl[]>('/api/links')
     .then((response) => response.data)
 }
+
+export const getShortifyUrlByCode = (code: string): Promise<ShortifyUrl> => {
+  return axios
+    .get<ShortifyUrl>(`/api/link/${code}`)
+    .then((response) => response.data)
+}

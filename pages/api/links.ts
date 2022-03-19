@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import normalizeUrl from 'normalize-url'
 import { isWebUri } from 'valid-url'
-import { ShortifyUrl } from '../../models/ShortifyUrl'
 import {
   createUrl,
   findUrl,
   getLatestUrls,
   increaseUrlRequestCount,
 } from '../../services/links'
+import { ShortifyUrl } from '../../models/ShortifyUrl'
 
 const postUrl = async (url: string): Promise<ShortifyUrl> => {
   if (!isWebUri(url)) {

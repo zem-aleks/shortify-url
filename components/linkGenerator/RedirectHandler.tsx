@@ -4,48 +4,32 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { notReachable } from '../../utility/notReachable'
+import { useLoadableData } from '../hooks/useLoadableData'
+import { getShortifyUrlByCode } from '../api/fetchShortifyUrl'
 
-export type RedirectState =
-  | {
-      type: 'found'
-      url: string
-    }
-  | {
-      type: 'notFound'
-    }
-  | {
-      type: 'error'
-      error: string
-    }
-
-type Props = {
-  redirectState: RedirectState
-}
-
-export const RedirectHandler = ({
-  redirectState,
-}: Props): JSX.Element | null => {
+export const RedirectHandler = (): JSX.Element | null => {
   const router = useRouter()
-
-  console.log(redirectState)
+  const code = String(router.query.urlCode)
+  const { state, reload } = useLoadableData(() => getShortifyUrlByCode(code))
 
   useEffect(() => {
-    switch (redirectState.type) {
-      case 'found':
-        window.location.href = redirectState.url
+    switch (state.type) {
+      case 'loaded':
+        window.location.href = state.data.url
         break
 
-      case 'notFound':
+      case 'loading':
       case 'error':
         break
 
       default:
-        return notReachable(redirectState)
+        return notReachable(state)
     }
-  }, [redirectState])
+  }, [state])
 
-  switch (redirectState.type) {
-    case 'found':
+  switch (state.type) {
+    case 'loading':
+    case 'loaded':
       return (
         <Stack flexDirection={'column'} gap={2}>
           <Typography>Redirecting...</Typography>
@@ -58,35 +42,24 @@ export const RedirectHandler = ({
         </Stack>
       )
 
-    case 'notFound':
-      return (
-        <Stack flexDirection={'column'} gap={2}>
-          <Typography>
-            Your URL is not found at Shortify URL. Would you like to create it?
-          </Typography>
-          <Link href="/" passHref>
-            <Button fullWidth variant={'contained'}>
-              Create Shortify URL
-            </Button>
-          </Link>
-        </Stack>
-      )
-
     case 'error':
       return (
         <Stack flexDirection={'column'} gap={2}>
           <Typography>Something went wrong</Typography>
+          <Button fullWidth variant={'contained'} onClick={() => reload()}>
+            Try again
+          </Button>
           <Button
             fullWidth
             variant={'contained'}
-            onClick={() => router.reload()}
+            onClick={() => router.replace('/')}
           >
-            Try again
+            Go home
           </Button>
         </Stack>
       )
 
     default:
-      return notReachable(redirectState)
+      return notReachable(state)
   }
 }
